@@ -1,0 +1,138 @@
+In der Liste unten sehen Sie die 64 MÃ¶glichkeiten
+einen Betrag 7 Euro mit MÃ¼nzen {1, 2, 3, ...} zu zahlen.
+Die Anordnung der MÃ¼nzen wird hier berÃ¼cksichtigt.
+
+Schreiben Sie in Programm, das alle ZahlungsmÃ¶glichkeiten fÃ¼r
+einen beliebigen Betrag n erzeugt. Die von Ihnen erzeugte Liste
+sollte (so wie im Beispiel) lexikographisch sortiert sein.
+
+Messen Sie die Zeit, die das Programm fÃ¼r ein (grosses) n benÃ¶tigt.
+DafÃ¼r sollte die Ausgabe der Liste abgestellt sein.
+Wieviele Updates schafft Ihr Programm pro Sekunde?
+Wieviele CPU cycles benÃ¶tigt ein Update?
+Hinweis: es gibt 2^(n-1) MÃ¶glichkeiten fÃ¼r n >= 1.
+Hinweis: "update" meint den Ãœbergang von einer
+ZahlmÃ¶glichkeit zur nÃ¤chsten.
+
+
+Funktioniert Ihr Programm auch fÃ¼r n == 0 ?
+
+   0:  ......  [ 1 1 1 1 1 1 1 ]
+   1:  .....1  [ 1 1 1 1 1 2 ]
+   2:  ....1.  [ 1 1 1 1 2 1 ]
+   3:  ....11  [ 1 1 1 1 3 ]
+   4:  ...1..  [ 1 1 1 2 1 1 ]
+   5:  ...1.1  [ 1 1 1 2 2 ]
+   6:  ...11.  [ 1 1 1 3 1 ]
+   7:  ...111  [ 1 1 1 4 ]
+   8:  ..1...  [ 1 1 2 1 1 1 ]
+   9:  ..1..1  [ 1 1 2 1 2 ]
+  10:  ..1.1.  [ 1 1 2 2 1 ]
+  11:  ..1.11  [ 1 1 2 3 ]
+  12:  ..11..  [ 1 1 3 1 1 ]
+  13:  ..11.1  [ 1 1 3 2 ]
+  14:  ..111.  [ 1 1 4 1 ]
+  15:  ..1111  [ 1 1 5 ]
+  16:  .1....  [ 1 2 1 1 1 1 ]
+  17:  .1...1  [ 1 2 1 1 2 ]
+  18:  .1..1.  [ 1 2 1 2 1 ]
+  19:  .1..11  [ 1 2 1 3 ]
+  20:  .1.1..  [ 1 2 2 1 1 ]
+  21:  .1.1.1  [ 1 2 2 2 ]
+  22:  .1.11.  [ 1 2 3 1 ]
+  23:  .1.111  [ 1 2 4 ]
+  24:  .11...  [ 1 3 1 1 1 ]
+  25:  .11..1  [ 1 3 1 2 ]
+  26:  .11.1.  [ 1 3 2 1 ]
+  27:  .11.11  [ 1 3 3 ]
+  28:  .111..  [ 1 4 1 1 ]
+  29:  .111.1  [ 1 4 2 ]
+  30:  .1111.  [ 1 5 1 ]
+  31:  .11111  [ 1 6 ]
+  32:  1.....  [ 2 1 1 1 1 1 ]
+  33:  1....1  [ 2 1 1 1 2 ]
+  34:  1...1.  [ 2 1 1 2 1 ]
+  35:  1...11  [ 2 1 1 3 ]
+  36:  1..1..  [ 2 1 2 1 1 ]
+  37:  1..1.1  [ 2 1 2 2 ]
+  38:  1..11.  [ 2 1 3 1 ]
+  39:  1..111  [ 2 1 4 ]
+  40:  1.1...  [ 2 2 1 1 1 ]
+  41:  1.1..1  [ 2 2 1 2 ]
+  42:  1.1.1.  [ 2 2 2 1 ]
+  43:  1.1.11  [ 2 2 3 ]
+  44:  1.11..  [ 2 3 1 1 ]
+  45:  1.11.1  [ 2 3 2 ]
+  46:  1.111.  [ 2 4 1 ]
+  47:  1.1111  [ 2 5 ]
+  48:  11....  [ 3 1 1 1 1 ]
+  49:  11...1  [ 3 1 1 2 ]
+  50:  11..1.  [ 3 1 2 1 ]
+  51:  11..11  [ 3 1 3 ]
+  52:  11.1..  [ 3 2 1 1 ]
+  53:  11.1.1  [ 3 2 2 ]
+  54:  11.11.  [ 3 3 1 ]
+  55:  11.111  [ 3 4 ]
+  56:  111...  [ 4 1 1 1 ]
+  57:  111..1  [ 4 1 2 ]
+  58:  111.1.  [ 4 2 1 ]
+  59:  111.11  [ 4 3 ]
+  60:  1111..  [ 5 1 1 ]
+  61:  1111.1  [ 5 2 ]
+  62:  11111.  [ 6 1 ]
+  63:  111111  [ 7 ]
+ ct=64
+
+
+Falls obiges zu einfach war:
+
+Erzeugen Sie die Liste in der umgekehrten Reihenfolge.
+
+Schreiben Sie ranking und unranking -Methoden
+
+Schreiben Sie ein Programm fÃ¼r die Liste der ZahlungsmÃ¶glichkeiten
+wo es nicht auf die Reihenfolge der MÃ¼nzen ankommt; siehe unten.
+
+   1:  [10]   [ 1 1 1 1 1 1 1 1 1 1 ]
+   2:  [ 9]   [ 1 1 1 1 1 1 1 1 2 ]
+   3:  [ 8]   [ 1 1 1 1 1 1 1 3 ]
+   4:  [ 8]   [ 1 1 1 1 1 1 2 2 ]
+   5:  [ 7]   [ 1 1 1 1 1 1 4 ]
+   6:  [ 7]   [ 1 1 1 1 1 2 3 ]
+   7:  [ 6]   [ 1 1 1 1 1 5 ]
+   8:  [ 7]   [ 1 1 1 1 2 2 2 ]
+   9:  [ 6]   [ 1 1 1 1 2 4 ]
+  10:  [ 6]   [ 1 1 1 1 3 3 ]
+  11:  [ 5]   [ 1 1 1 1 6 ]
+  12:  [ 6]   [ 1 1 1 2 2 3 ]
+  13:  [ 5]   [ 1 1 1 2 5 ]
+  14:  [ 5]   [ 1 1 1 3 4 ]
+  15:  [ 4]   [ 1 1 1 7 ]
+  16:  [ 6]   [ 1 1 2 2 2 2 ]
+  17:  [ 5]   [ 1 1 2 2 4 ]
+  18:  [ 5]   [ 1 1 2 3 3 ]
+  19:  [ 4]   [ 1 1 2 6 ]
+  20:  [ 4]   [ 1 1 3 5 ]
+  21:  [ 4]   [ 1 1 4 4 ]
+  22:  [ 3]   [ 1 1 8 ]
+  23:  [ 5]   [ 1 2 2 2 3 ]
+  24:  [ 4]   [ 1 2 2 5 ]
+  25:  [ 4]   [ 1 2 3 4 ]
+  26:  [ 3]   [ 1 2 7 ]
+  27:  [ 4]   [ 1 3 3 3 ]
+  28:  [ 3]   [ 1 3 6 ]
+  29:  [ 3]   [ 1 4 5 ]
+  30:  [ 2]   [ 1 9 ]
+  31:  [ 5]   [ 2 2 2 2 2 ]
+  32:  [ 4]   [ 2 2 2 4 ]
+  33:  [ 4]   [ 2 2 3 3 ]
+  34:  [ 3]   [ 2 2 6 ]
+  35:  [ 3]   [ 2 3 5 ]
+  36:  [ 3]   [ 2 4 4 ]
+  37:  [ 2]   [ 2 8 ]
+  38:  [ 3]   [ 3 3 4 ]
+  39:  [ 2]   [ 3 7 ]
+  40:  [ 2]   [ 4 6 ]
+  41:  [ 2]   [ 5 5 ]
+  42:  [ 1]   [ 10 ]
+ ct=42
