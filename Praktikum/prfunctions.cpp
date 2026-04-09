@@ -1,30 +1,44 @@
 #include "prfunctions.h"
 
-namespace {
-constexpr std::size_t MAX_DIGITS = 128;
-}
-
-bool addOneBaseB(unsigned int digits[], std::size_t size, unsigned int base) {
-	if (size == 0 || base < 2) {
-		return false;
+/*
+ * Adds one to a number represented in a given base.
+ */
+std::vector<unsigned int> addOneBaseB(std::vector<unsigned int> digits, unsigned int base) {
+	
+	// check valid input
+	if (digits.empty() || base < 2) {
+		return digits; // return unchanged
 	}
+	
+	// Add one from the right
+	for (std::size_t i = digits.size()-1; i >= 0; --i) {
 
-	// Add one from right to left and propagate carry.
-	for (std::size_t i = size; i > 0; --i) {
-		std::size_t idx = i - 1;
-		++digits[idx];
+		digits[i] ++; // add one
 
-		if (digits[idx] < base) {
-			return false;
+		if (digits[i] < base) {
+			return digits; // return if no carry is needed
 		}
 
-		digits[idx] = 0;
+		digits[i] = 0; // set digit to zero and carry to next digit
 	}
 
-	// Carry left the most significant digit, so the number wrapped around.
-	return true;
+	digits.insert(digits.begin(), 1); // add new most significant digit if overflow occurs
+
+	return digits;
 }
 
+
+std::vector<unsigned int> addOneGrayBaseN(std::vector<unsigned int> digits, unsigned int base) {
+	
+	// check valid input
+	if (digits.empty() || base < 2) {
+		return digits; // return unchanged
+	}
+
+	return digits; // return unchanged
+
+}
+/*
 bool addOneGrayBaseN(unsigned int grayDigits[], std::size_t size, unsigned int base) {
 	if (size == 0 || base < 2 || size > MAX_DIGITS) {
 		return false;
@@ -72,3 +86,4 @@ bool addOneGrayBaseN(unsigned int grayDigits[], std::size_t size, unsigned int b
 
 	return overflow;
 }
+*/
