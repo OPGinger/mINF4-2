@@ -5,6 +5,8 @@
 #include <cerrno>
 #include <climits>
 
+#include "../prfunctions.h"
+
 constexpr std::size_t MAX_DIGITS = 128;
 
 bool hasValidDigits(const unsigned int digits[], std::size_t size, unsigned int base) {
@@ -19,27 +21,6 @@ bool hasValidDigits(const unsigned int digits[], std::size_t size, unsigned int 
 		}
 	}
 
-	return true;
-}
-
-bool addOneBaseB(unsigned int digits[], std::size_t size, unsigned int base) {
-	if (size == 0 || base < 2) {
-		return false;
-	}
-
-	// Add 1 at the least significant digit and propagate carry to the left.
-	for (std::size_t i = size; i > 0; --i) {
-		std::size_t idx = i - 1;
-		++digits[idx];
-
-		if (digits[idx] < base) {
-			return false;
-		}
-
-		digits[idx] = 0;
-	}
-
-	// Carry still present after the most significant digit: wrap-around happened.
 	return true;
 }
 
