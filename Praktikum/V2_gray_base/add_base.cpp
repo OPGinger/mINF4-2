@@ -1,7 +1,14 @@
 #include "..\prfunctions.h"
 #include <iostream>
 
-int main(){
+int main(int argc, char** argv){
+
+    if(argc < 3)
+    {
+        std::cout << "Usage: <base> <add> [numbers...]\n";
+        return 1;
+    }
+
     std::vector<unsigned int> digits = {1, 2, 3};
     unsigned int base = 5;
     unsigned int add = 25;

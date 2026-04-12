@@ -1,89 +1,75 @@
 #include <iostream>
-#include <stdexcept>
 #include <vector>
+#include <sstream>
+#include <cmath>
+#include <iomanip>
 
-std::vector<std::vector<unsigned int>> generateGrayCode(unsigned int n, unsigned int base) {
-    if (n == 0) {
-        return {{}};
+#include "../prfunctions.h"
+
+std::vector<unsigned int> generateGrayCodeBaseB(unsigned int digits, unsigned int base) {
+    if (digits == 0) {
+        return{};
     }
 
-    if (n == 1) {
-        std::vector<std::vector<unsigned int>> result;
-        result.reserve(base);
-        for (unsigned int digit = 0; digit < base; ++digit) {
-            result.push_back({digit});
-        }
-        return result;
+    std::vector<unsigned int> code(digits,0);
+    code.back() = 0;
+
+    for(unsigned int i = 0; i < code.size(); i++) {
+        
+        printf("\n");
     }
 
-    auto shorter = generateGrayCode(n - 1, base);
-    std::vector<std::vector<unsigned int>> result;
-    result.reserve(shorter.size() * base);
-
-    for (unsigned int digit = 0; digit < base; ++digit) {
-        if (digit % 2 == 0) {
-            for (const auto& suffix : shorter) {
-                std::vector<unsigned int> code;
-                code.reserve(n);
-                code.push_back(digit);
-                code.insert(code.end(), suffix.begin(), suffix.end());
-                result.push_back(std::move(code));
-            }
-        } else {
-            for (auto it = shorter.rbegin(); it != shorter.rend(); ++it) {
-                std::vector<unsigned int> code;
-                code.reserve(n);
-                code.push_back(digit);
-                code.insert(code.end(), it->begin(), it->end());
-                result.push_back(std::move(code));
-            }
-        }
-    }
-
-    return result;
+    return code;
 }
 
-int main() {
-    unsigned int n, base, x;
-    if (!(std::cin >> n >> base >> x)) {
-        std::cerr << "Fehler: Bitte drei ganze Zahlen eingeben: N B X\n";
-        return 1;
-    }
+int main(int argc, char** argv){
+    int steps = 0;
+    int base = 0;
 
-    if (n == 0) {
-        std::cerr << "Fehler: N muss groesser als 0 sein.\n";
-        return 1;
-    }
+    while (steps <= 0 || base < 2)
+    {
+        if(argc != 3){ // no command line arguments
 
-    if (base < 2) {
-        std::cerr << "Fehler: Basis B muss mindestens 2 sein.\n";
-        return 1;
-    }
+            std::cout << "Usage: <steps> <base>:";
+            
+            // read in steps and base from user input
+            if (!(std::cin >> steps >> base)) {
+                steps = 0;
+                base = 0;
+            }
 
-    unsigned long long total = 1;
-    for (unsigned int i = 0; i < n; ++i) {
-        if (total > ULLONG_MAX / base) {
-            std::cerr << "Fehler: Die Anzahl der Graycodes ist zu gross.\n";
-            return 1;
-        }
-        total *= base;
-    }
+        }else{ // read in from command line arguments
+            std::istringstream input_steps(argv[1]);
+            std::istringstream input_base(argv[2]);
 
-    if (x >= total) {
-        std::cerr << "Warnung: X liegt ausserhalb des Bereichs. Ausgabe wird auf " << (total - 1) << " begrenzt.\n";
-        x = static_cast<unsigned int>(total - 1);
-    }
+            if (!(input_steps >> steps) || !input_steps.eof()) {
+                steps = 0;
+            }
 
-    auto grayCodes = generateGrayCode(n, base);
-    for (unsigned int index = 0; index <= x; ++index) {
-        const auto& code = grayCodes[index];
-        for (unsigned int j = 0; j < code.size(); ++j) {
-            std::cout << code[j];
-            if (j + 1 < code.size()) {
-                std::cout << ' ';
+            if (!(input_base >> base) || !input_base.eof()) {
+                base = 0;
             }
         }
-        std::cout << '\n';
+    }
+
+    std::cout << "Steps: " << steps << ", Base: " << base << std::endl;
+
+    // create vector with the right number of digits
+    std::vector<int> grayCode(ceil(log(steps) / log(base)),0);
+
+    for(int i = 0; i <= steps; i++) {
+
+        std::cout << "Step " << std::setw(ceil(log(steps) / log(10))) << i << ": ";
+
+        // print out digits
+        for (int i = 0; i < grayCode.size(); i++) {
+            std::cout << grayCode[i] << " ";
+        }
+
+        // add one to the gray code
+        grayCode = addOneGrayBaseB(grayCode, base);
+
+        std::cout << std::endl;
     }
 
     return 0;
