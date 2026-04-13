@@ -7,31 +7,67 @@
 #include <sstream>
 #include <iomanip>
 
+// Composition & Partition
+
+#define LOGGGING false
 
 int n = 0;
 unsigned int count = 0;
 
-void rec_arr(unsigned int *arr, unsigned int pos, unsigned int rest){
+void composition(unsigned int *arr, unsigned int pos, unsigned int rest){
     
     if(rest == 0){// last element reached
-        // print out array
-        for (unsigned int i = 0; i < pos; i++) {
-            std::cout << arr[i] << " ";
-        }
-        std::cout << "\n";
+
+        #if LOGGGING
+            // print out array
+            for (unsigned int i = 0; i < pos; i++) {
+                std::cout << arr[i] << " ";
+            }
+            std::cout << "\n";
+        #endif
 
         count++;
 
         return;
     }else{
 
-        for (unsigned coin = 1; coin <= rest; ++coin)
+        for (unsigned coin = 1; coin <= rest; coin++)
         {
             // fill array with remaining values
             arr[pos] = coin;
 
             // go to next position
-            rec_arr(arr, pos+1, rest-coin);
+            composition(arr, pos+1, rest-coin);
+        }
+
+        return;
+    }
+}
+
+void partition(unsigned int *arr, unsigned int pos, unsigned int rest, unsigned int last){
+    
+    if(rest == 0){// last element reached
+
+        #if LOGGGING
+            // print out array
+            for (unsigned int i = 0; i < pos; i++) {
+                std::cout << arr[i] << " ";
+            }
+            std::cout << "\n";
+        #endif
+
+        count++;
+
+        return;
+    }else{
+
+        for (unsigned coin = 1; coin <= rest && coin <= last; coin++)
+        {
+            // fill array with remaining values
+            arr[pos] = coin;
+
+            // go to next position
+            partition(arr, pos+1, rest-coin, coin);
         }
 
         return;
@@ -42,9 +78,9 @@ int main(int argc, char** argv){
 
     // check input parameters
     // n has to be bigger than 0
-    while (n <= 0 || n > 64)
+    while (n <= 0)
     {
-        if(argc != 2){
+        if(argc < 2){
             std::cout << "n [1..64] eingeben: ";
             
             // read in n
@@ -67,8 +103,13 @@ int main(int argc, char** argv){
 
     // init vector with ones
     unsigned int v_input[n] = {1};
-    // execute recursive variants
-    rec_arr(v_input,0,(unsigned int)n);
+
+    // execute recursive variant
+    if(argc <= 2 || strcmp(argv[2], "composition") == 0){
+        composition(v_input,0,(unsigned int)n);
+    }else if(strcmp(argv[2], "partition") == 0){
+        partition(v_input,0,(unsigned int)n,(unsigned int)n);
+    }  
     
     // get end time
     auto t_end = clock();
