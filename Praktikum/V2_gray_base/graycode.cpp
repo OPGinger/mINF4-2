@@ -62,7 +62,7 @@ int main(int argc, char** argv){
         std::cout << "Step " << std::setw(ceil(log(steps) / log(10))) << i << ": ";
 
         // print out digits
-        for (int i = 0; i < grayCode.size(); i++) {
+        for (unsigned int i = 0; i < grayCode.size(); i++) {
             std::cout << grayCode[i] << " ";
         }
 
