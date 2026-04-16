@@ -5,6 +5,7 @@
 #include <cmath>
 #include <iomanip>
 #include <istream>
+#include <string>
 
 int main(int argc, char** argv){
 
@@ -12,118 +13,104 @@ int main(int argc, char** argv){
     std::vector<unsigned int> bases = {};
     unsigned int add = 0;
 
-    // check for valid input
-    while (1)
+    // check valid command line arguments input
     {
-        if(argc < 4){ // not enough command line arguments
+        if(argc != 4){
+            std::cout << "Usage: <digit>:<digit>:... <add> <base>[:<base>:...]\n";
+            std::cout << "  <digit> positive integers\n";
+            std::cout << "  <add> positive integer\n";
+            std::cout << "  <base> positive integers >= 2\n";
 
-            std::cout << "Usage: <start> <add> <base>:";
-            
-            unsigned int number = 0;
+            return 1;
+        }
 
-            // read in steps and base from user input
-            if (!(std::cin >> number >> add)) {
-                number = 0;
-                add = 0;
-            }
+        // Parse digits from command line
+        {
+            std::string digits_str = argv[1];
+            std::string token;
 
-            // read in bases
-            unsigned int base = 0;
-            while(std::cin >> base) {
-                bases.push_back(base);
-            }
+            size_t pos = 0;
+            while ((pos = digits_str.find(':')) != std::string::npos) {
+                // get token from string
+                token = digits_str.substr(0, pos);
+                std::istringstream iss_token(token);
 
-            // write digits into vector
-            digits.clear();
-            if (bases.empty()) {
-                std::cout << "Invalid input: at least one base is required." << std::endl;
-                return 1;
-            }
-
-            // count digits of input number
-            unsigned int totalDigits = 0;
-            unsigned int counter = number;
-            do {
-                totalDigits++;
-                counter /= 10;
-            } while (counter > 0);
-
-            // check number of basis and digits match
-            if (bases.size() != 1 && bases.size() != totalDigits) {
-                std::cout << "Invalid input: number of bases must be either 1 or equal to the number of digits." << std::endl;
-                return 1;
-            }
-
-            // for start number equal 0
-            if (number == 0) {
-                if (bases[0] <= 0) {
-                    std::cout << "Invalid input: digit 0 is not valid for base " << bases[0] << std::endl;
+                // read in digit
+                unsigned int digit;
+                if (!(iss_token >> digit)) {
+                    std::cout << "Invalid input: digits must be positive integers.\n";
                     return 1;
                 }
-                digits.push_back(0);
-            } else { // for start numbers > 0
-                unsigned int temp = number;
-                unsigned int posFromRight = 0;
 
-                while (temp > 0) {
-                    unsigned int digit = temp % 10;
-                    unsigned int digitIndex = totalDigits - 1 - posFromRight;
-                    unsigned int currentBase = (bases.size() == 1) ? bases[0] : bases[digitIndex];
+                // add digit to vector
+                digits.push_back(digit);
 
-                    if (digit >= currentBase) {
-                        std::cout << "Invalid input: digit " << digit << " is not valid for base " << currentBase << std::endl;
-                        return 1;
-                    }
-
-                    digits.insert(digits.begin(), digit);
-                    temp /= 10;
-                    posFromRight++;
-                }
+                // remove last token from string
+                digits_str.erase(0, pos + 1);
             }
 
-            
-
-        }else{ // read in from command line arguments
-            std::istringstream input_steps(argv[1]);
-            std::istringstream input_base(argv[2]);
-
-            if (!(input_steps >> steps) || !input_steps.eof()) {
-                steps = 0;
+            // Last token (last digit)
+            std::istringstream iss_last(digits_str);
+            unsigned int digit;
+            if (!(iss_last >> digit)) {
+                std::cout << "Invalid input: digits must be positive integers.\n";
+                return 1;
             }
-
-            if (!(input_base >> base) || !input_base.eof()) {
-                base = 0;
-            }
-        }
+            digits.push_back(digit);
     }
 
-    if(argc < 3)
-    {
-        std::cout << "Usage: <base> <add> [numbers...]\n";
-        return 1;
-    }else{ // read in from command line arguments
-            std::istringstream input_steps(argv[1]);
-            std::istringstream input_base(argv[2]);
-
-            if (!(input_steps >> steps) || !input_steps.eof()) {
-                steps = 0;
-            }
-
-            if (!(input_base >> base) || !input_base.eof()) {
-                base = 0;
-            }
-        }
-
-    if(bases.size() != 1 && bases.size() != digits.size()) {
-        std::cout << "Invalid input: number of bases must be either 1 or equal to the number of digits." << std::endl;
-        return 1;
-    }
-
-    for (std::size_t i = 0; i < digits.size(); i++) {
-        unsigned int currentBase = (bases.size() == 1) ? bases[0] : bases[i];
-        if (digits[i] >= currentBase) {
-            std::cout << "Invalid input: digit " << digits[i] << " is not valid for base " << currentBase << std::endl;
+        // Parse number to add from command line
+        std::istringstream iss_add(argv[2]);
+        if (!(iss_add >> add)) {
+            std::cout << "Invalid input: add must be a positive integer.\n";
             return 1;
+        }
+
+        // Parse bases from command line
+        {
+            std::string bases_str = argv[3];
+            std::string token;
+
+            size_t pos = 0;
+            while ((pos = bases_str.find(':')) != std::string::npos) {
+                // get token from string
+                token = bases_str.substr(0, pos);
+                std::istringstream iss_base(token);
+
+                unsigned int base;
+                if (!(iss_base >> base) || base < 2) {
+                    std::cout << "Invalid input: bases must be integers >= 2.\n";
+                    return 1;
+                }
+
+                bases.push_back(base);
+
+                bases_str.erase(0, pos + 1);
+            }
+
+            // Last token
+            std::istringstream iss_base_last(bases_str);
+            unsigned int base;
+            if (!(iss_base_last >> base) || base < 2) {
+                std::cout << "Invalid input: bases must be integers >= 2.\n";
+                return 1;
+            }
+            bases.push_back(base);
+
+            // Validate bases count
+            if (bases.size() != 1 && bases.size() != digits.size()) {
+                std::cout << "Invalid input: number of bases must be either 1 or equal to the number of digits.\n";
+                return 1;
+            }
+        }
+
+        // Validate digits against bases
+        for (size_t i = 0; i < digits.size(); ++i) {
+            unsigned int currentBase = (bases.size() == 1) ? bases[0] : bases[i];
+            if (digits[i] >= currentBase) {
+                std::cout << "Invalid input: digit " << digits[i] << " is not valid for base " << currentBase << ".\n";
+                return 1;
+            }
         }
     }
 
@@ -133,19 +120,24 @@ int main(int argc, char** argv){
     }
     std::cout << std::endl;
 
-    bool carry = false;
+    // add numbers one by one
     for (int i = 0; i < add; i++)
     {
-        auto result = addOneBaseB(digits, bases[i % bases.size()]);
-        digits = result.first;
-        carry = result.second;
+        bool carry = false;
+        int digit_index = digits.size() - 1;
+        // add with carry
+        do{
+            unsigned int currentBase = (bases.size() == 1) ? bases[0] : bases[digit_index];
+            unsigned int currentDigit = digits[digit_index];
 
-        if(carry){
-            result = addOneBaseB(digits, bases[(i + 1) % bases.size()]);
-            digits = result.first;
+            auto result = addOneBaseB(currentDigit, currentBase);
+            digits[digit_index] = result.first;
             carry = result.second;
-        }
 
+            digit_index--;
+        }while(carry && digit_index >= 0);
+
+        // output result afer adding
         std::cout << "+1 --> ";
         for (unsigned int digit : digits) {
             std::cout << digit << " ";
