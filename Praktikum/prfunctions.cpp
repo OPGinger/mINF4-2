@@ -1,5 +1,49 @@
 #include "prfunctions.h"
 #include <iostream>
+#include <cstdint>
+
+/*
+ * Returns a mask for a given width.
+ */
+unsigned maskForWidth(unsigned width) {
+    return width >= 32 ? 0xFFFFFFFFu : ((1u << width) - 1u);
+}
+
+/*
+ * Rotates a value to the left by a given shift amount within a specified width.
+ */
+unsigned rotateLeft(unsigned value, unsigned shift, unsigned width) {
+    width &= 31;
+
+    if (width == 0)
+		return value;
+
+    shift %= width;
+
+    unsigned mask = maskForWidth(width);
+
+    value &= mask;
+
+    return ((value << shift) | (value >> (width - shift))) & mask;
+}
+
+/*
+ * Rotates a value to the right by a given shift amount within a specified width.
+ */
+unsigned rotateRight(unsigned value, unsigned shift, unsigned width) {
+    width &= 31;
+
+    if (width == 0)
+		return value;
+
+    shift %= width;
+
+    unsigned mask = maskForWidth(width);
+
+    value &= mask;
+	
+    return ((value >> shift) | (value << (width - shift))) & mask;
+}
 
 /*
  * Adds one to a number represented in a given base.
