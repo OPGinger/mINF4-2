@@ -4,28 +4,22 @@
 /*
  * Adds one to a number represented in a given base.
  */
-std::pair<std::vector<unsigned int>, bool> addOneBaseB(std::vector<unsigned int> digits, unsigned int base) {
+std::pair<unsigned int, bool> addOneBaseB( unsigned int number, unsigned int base) {
 	
 	// check valid input
-	if (digits.empty() || base < 2) {
-		return {digits, false}; // return unchanged
+	if (base < 2) {
+		return {number, false}; // return unchanged
 	}
 	
-	// Add one from the right
-	for (int i = digits.size()-1; i >= 0; --i) {
+		number ++; // add one
 
-		digits[i] ++; // add one
-
-		if (digits[i] < base) {
-			return {digits, false}; // return if no carry is needed
+		if (number < base) {
+			return {number, false}; // return if no carry is needed
 		}
 
-		digits[i] = 0; // set digit to zero and carry to next digit
-	}
+		number = 0; // set digit to zero and carry to next digit
 
-	digits.insert(digits.begin(), 1); // add new most significant digit if overflow occurs
-
-	return {digits, true};
+	return {number, true};
 }
 
 /*
