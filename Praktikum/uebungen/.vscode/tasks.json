@@ -1,25 +1,57 @@
 {
     "tasks": [
         {
-            "type": "cppbuild",
-            "label": "build active file",
+            "type": "shell",
+            "label": "build active cpp and includes",
             "command": "C:\\perl\\c\\bin\\g++.exe",
             "args": [
                 "-O3",
                 "-Wall",
                 "-Wextra",
-                "${file}",
+                "${fileDirname}\\*.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
             "options": {
-                "cwd": "C:\\perl\\c\\bin"
+                "cwd": "${workspaceFolder}",
+                "shell": {
+                    "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                    "args": [
+                        "-NoProfile",
+                        "-ExecutionPolicy",
+                        "Bypass",
+                        "-Command"
+                    ]
+                }
             },
             "problemMatcher": [
                 "$gcc"
             ],
             "group": {
                 "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "run active cpp exe",
+            "command": "& \"${fileDirname}\\${fileBasenameNoExtension}.exe\"",
+            "dependsOn": "build active cpp and includes",
+            "dependsOrder": "sequence",
+            "options": {
+                "cwd": "${fileDirname}",
+                "shell": {
+                    "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                    "args": [
+                        "-NoProfile",
+                        "-ExecutionPolicy",
+                        "Bypass",
+                        "-Command"
+                    ]
+                }
+            },
+            "group": {
+                "kind": "test",
                 "isDefault": true
             }
         }

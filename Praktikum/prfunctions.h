@@ -3,6 +3,6 @@
 #include <cstddef>
 #include <vector>
 
-std::vector<unsigned int> addOneBaseB(std::vector<unsigned int> digits, unsigned int base);
+std::pair<std::vector<unsigned int>, bool> addOneBaseB(std::vector<unsigned int> digits, unsigned int base);
 //bool addOneGrayBaseN(unsigned int grayDigits[], std::size_t size, unsigned int base);
-std::vector<int> addOneGrayBaseB(std::vector<int> digits, unsigned int base);
+std::vector<int> addOneGrayBaseB(std::vector<int> digits, int base);
