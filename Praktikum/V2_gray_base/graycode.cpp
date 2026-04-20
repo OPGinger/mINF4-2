@@ -6,22 +6,6 @@
 
 #include "../prfunctions.h"
 
-std::vector<unsigned int> generateGrayCodeBaseB(unsigned int digits, unsigned int base) {
-    if (digits == 0) {
-        return{};
-    }
-
-    std::vector<unsigned int> code(digits,0);
-    code.back() = 0;
-
-    for(unsigned int i = 0; i < code.size(); i++) {
-        
-        printf("\n");
-    }
-
-    return code;
-}
-
 int main(int argc, char** argv){
     int steps = 0;
     int base = 0;
