@@ -10,28 +10,30 @@ int main(int argc, char** argv){
     int steps = 0;
     int base = 0;
 
-    while (steps <= 0 || base < 2)
-    {
-        if(argc != 3){ // no command line arguments
+    {// validate input
+        while (steps <= 0 || base < 2)
+        {
+            if(argc != 3){ // no command line arguments
 
-            std::cout << "Usage: <steps> <base>:";
-            
-            // read in steps and base from user input
-            if (!(std::cin >> steps >> base)) {
-                steps = 0;
-                base = 0;
-            }
+                std::cout << "Usage: <steps> <base>:";
+                
+                // read in steps and base from user input
+                if (!(std::cin >> steps >> base)) {
+                    steps = 0;
+                    base = 0;
+                }
 
-        }else{ // read in from command line arguments
-            std::istringstream input_steps(argv[1]);
-            std::istringstream input_base(argv[2]);
+            }else{ // read in from command line arguments
+                std::istringstream input_steps(argv[1]);
+                std::istringstream input_base(argv[2]);
 
-            if (!(input_steps >> steps) || !input_steps.eof()) {
-                steps = 0;
-            }
+                if (!(input_steps >> steps) || !input_steps.eof()) {
+                    steps = 0;
+                }
 
-            if (!(input_base >> base) || !input_base.eof()) {
-                base = 0;
+                if (!(input_base >> base) || !input_base.eof()) {
+                    base = 0;
+                }
             }
         }
     }
