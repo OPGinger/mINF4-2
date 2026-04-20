@@ -26,7 +26,7 @@ void printPartition(const std::vector<int>& blockIds, int n) {
     for (int i = 0; i < n; ++i) {
         blockCount = std::max(blockCount, blockIds[i] + 1);
     }
-
+ 
     // print block IDs with colors
     for (int i = 0; i < n; ++i) {
         int blockId = blockIds[i];
@@ -70,7 +70,7 @@ unsigned int generatePartitions(unsigned int n, int elementIndex, int partitionC
     static std::vector<int> blockIds(n, 0);
 
     // all contacts have been assigned to blocks
-    if (elementIndex == blockIds.size()) {
+    if (elementIndex == (int)blockIds.size()) {
         std::cout << std::setw(4) << ++variantsCount << " (partitions: "<< partitionCount << "): ";
         printPartition(blockIds, blockIds.size());
 
